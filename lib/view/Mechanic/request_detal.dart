@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../Controller/request_controller.dart';
-import '../../models/request_model.dart';
+import 'Job Request/job_request.dart';
 
 class RequestDetailPage extends StatelessWidget {
-  final RequestModel request;
-  const RequestDetailPage({super.key, required this.request});
-
   @override
   Widget build(BuildContext context) {
-    final RequestController reqC = Get.find<RequestController>();
+    final size = MediaQuery.of(context).size;
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.5,
-      maxChildSize: 0.85,
-      minChildSize: 0.3,
+      initialChildSize: 0.6,
+      minChildSize: 0.4,
+      maxChildSize: 0.9,
       builder: (context, scrollController) {
         return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
+          padding: EdgeInsets.all(size.width * 0.05),
+          decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
           ),
           child: SingleChildScrollView(
             controller: scrollController,
@@ -30,206 +30,115 @@ class RequestDetailPage extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    width: 50,
+                    width: size.width * 0.15,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-
-                // Title / Description
+                const SizedBox(height: 10),
                 Text(
-                  request.description ?? "No description provided",
+                  "New Job Request",
                   style: GoogleFonts.poppins(
-                    fontSize: 18,
+                    fontSize: size.width * 0.05,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 6),
-
-                // Vehicle Info (if available)
-                if (request.vehicleInfo != null &&
-                    request.vehicleInfo!.isNotEmpty)
-                  Row(
-                    children: [
-                      const Icon(Icons.directions_car, color: Colors.blueGrey),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          request.vehicleInfo!,
-                          style: GoogleFonts.poppins(fontSize: 14),
-                        ),
-                      ),
-                    ],
-                  ),
                 const SizedBox(height: 10),
-
-                // Location Info
                 Row(
                   children: [
-                    const Icon(Icons.location_on, color: Colors.redAccent),
-                    const SizedBox(width: 8),
+                    CircleAvatar(
+                      radius: size.width * 0.06,
+                      backgroundColor: Colors.grey[300],
+                      child: Icon(Icons.person, color: Colors.black),
+                    ),
+                    SizedBox(width: size.width * 0.03),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Kylie Evans",
+                          style: GoogleFonts.poppins(
+                            fontSize: size.width * 0.045,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "Flat Tire - Toyota Corolla",
+                          style: GoogleFonts.poppins(
+                            fontSize: size.width * 0.035,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    infoBox(size, "Distance", "4.5 km"),
+                    infoBox(size, "ETA", "12 mins"),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Container(
+                  height: size.height * 0.18,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      "Assest/image/936biS.jpg",
+                      height: size.height * 0.18,
+                      width: size.width,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
                     Expanded(
-                      child: Text(
-                        "Lat: ${request.location?['latitude']?.toStringAsFixed(5) ?? '-'}, "
-                        "Lng: ${request.location?['longitude']?.toStringAsFixed(5) ?? '-'}",
-                        style: GoogleFonts.poppins(fontSize: 13),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          "Reject",
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.to(() => JobAcceptedScreen());
+                        },
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          "Accept",
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-
-                // Status Chip
-                Row(
-                  children: [
-                    Text(
-                      "Status: ",
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    Chip(
-                      label: Text(
-                        request.status?.toUpperCase() ?? 'UNKNOWN',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: _statusColor(request.status),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Attached Photos
-                if (request.images != null && request.images!.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Attached Photos",
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 90,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: request.images!.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(width: 10),
-                          itemBuilder: (context, index) {
-                            final url = request.images![index];
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                url,
-                                width: 90,
-                                height: 90,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Container(
-                                  color: Colors.grey[300],
-                                  width: 90,
-                                  height: 90,
-                                  child: const Icon(Icons.image_not_supported),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
-
-                // Mechanic actions based on status
-                if (request.status == 'pending')
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          await reqC.acceptRequest(request.id!);
-                          Get.back();
-                          Get.snackbar(
-                            "Accepted",
-                            "Request accepted successfully",
-                          );
-                        },
-                        icon: const Icon(Icons.check),
-                        label: const Text("Accept"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          await reqC.rejectRequest(request.id!);
-                          Get.back();
-                          Get.snackbar("Rejected", "Request rejected");
-                        },
-                        icon: const Icon(Icons.close),
-                        label: const Text("Reject"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                else if (request.status == 'accepted')
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        await reqC.completeRequest(request.id!);
-                        Get.back();
-                        Get.snackbar("Completed", "Service marked as complete");
-                      },
-                      icon: const Icon(Icons.done),
-                      label: const Text("Mark Completed"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 14,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  )
-                else
-                  Center(
-                    child: Text(
-                      "✅ ${request.status!.toUpperCase()}",
-                      style: GoogleFonts.poppins(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-
-                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -238,18 +147,34 @@ class RequestDetailPage extends StatelessWidget {
     );
   }
 
-  Color _statusColor(String? status) {
-    switch ((status ?? '').toLowerCase()) {
-      case 'pending':
-        return Colors.orange;
-      case 'accepted':
-        return Colors.blue;
-      case 'completed':
-        return Colors.green;
-      case 'rejected':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
+  Widget infoBox(Size size, String title, String value) {
+    return Container(
+      width: size.width * 0.4,
+      padding: EdgeInsets.all(size.width * 0.03),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: size.width * 0.035,
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.poppins(
+              fontSize: size.width * 0.04,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

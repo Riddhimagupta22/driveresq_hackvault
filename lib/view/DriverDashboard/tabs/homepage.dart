@@ -21,7 +21,7 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     super.initState();
 
-    // ✅ Create live stream from Supabase Realtime
+
     _requestStream = supabase
         .from('requests')
         .stream(primaryKey: ['id'])
@@ -36,7 +36,6 @@ class _HomeTabState extends State<HomeTab> {
 
     return Column(
       children: [
-        // ✅ Header
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: const BoxDecoration(
@@ -65,7 +64,7 @@ class _HomeTabState extends State<HomeTab> {
           ),
         ),
 
-        // ✅ StreamBuilder with Supabase data
+
         Expanded(
           child: StreamBuilder<List<RequestModel>>(
             stream: _requestStream,
@@ -99,7 +98,6 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  // ✅ Empty state
   Widget _buildEmptyState(Color secondaryTextColor) {
     return Center(
       child: Column(
@@ -122,7 +120,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  // ✅ Request card
+
   Widget _buildRequestCard(
       BuildContext context, RequestModel request, Color primaryColor) {
     final lat = request.location?['lat'] ?? 'Unknown';
@@ -153,7 +151,7 @@ class _HomeTabState extends State<HomeTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "🆘 Active Rescue Request",
+              "Active Rescue Request",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -187,7 +185,7 @@ class _HomeTabState extends State<HomeTab> {
                   height: 180,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) =>
-                  const Text("⚠️ Invalid image data"),
+                  const Text("Invalid image data"),
                 ),
               ),
             const SizedBox(height: 12),
@@ -202,7 +200,7 @@ class _HomeTabState extends State<HomeTab> {
                         .from('requests')
                         .update({'status': 'completed'})
                         .eq('id', request.id!);
-                    Get.snackbar("✅ Completed", "Request marked as completed");
+                    Get.snackbar("Completed", "Request marked as completed");
                   },
                   icon:
                   const Icon(Icons.check_circle_outline, color: Colors.green),
@@ -212,7 +210,7 @@ class _HomeTabState extends State<HomeTab> {
                 TextButton.icon(
                   onPressed: () async {
                     await supabase.from('requests').delete().eq('id', request.id!);
-                    Get.snackbar("🗑️ Deleted", "Request removed successfully");
+                    Get.snackbar("Deleted", "Request removed successfully");
                   },
                   icon: const Icon(Icons.delete_outline,
                       color: Colors.redAccent),

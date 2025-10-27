@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../controller/auth_controller.dart';
 
-class ProfileTab extends StatelessWidget {
-  ProfileTab({super.key});
+
+class Profiletab extends StatelessWidget {
+  Profiletab({super.key});
 
   final authC = Get.put(AuthController());
 
@@ -16,7 +15,7 @@ class ProfileTab extends StatelessWidget {
         title: Text('Profile'),
         backgroundColor: Colors.white,
         elevation: 1,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // No back button
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
@@ -30,21 +29,21 @@ class ProfileTab extends StatelessWidget {
             ),
             SizedBox(height: 16),
 
-
+            // User Name
             Text(
-              'User Name',
+              'User Name', // Placeholder
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
 
-
+            // User Email
             Text(
-              'user.email@example.com',
+              'user.email@example.com', // Placeholder
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
             SizedBox(height: 32),
 
-
+            // Profile Options List
             ListTile(
               leading: Icon(
                 Icons.account_balance_wallet_outlined,
@@ -53,7 +52,7 @@ class ProfileTab extends StatelessWidget {
               title: Text('My Wallet'),
               trailing: Icon(Icons.chevron_right),
               onTap: () {
-
+                // To Wallet Screen
               },
             ),
             Divider(),
@@ -78,6 +77,7 @@ class ProfileTab extends StatelessWidget {
 
             SizedBox(height: 40),
 
+            // Log Out Button
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal,
@@ -88,7 +88,7 @@ class ProfileTab extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                authC.logout();
+                authC.logout(); // Call controller method
               },
               child: Text('Log Out', style: TextStyle(fontSize: 16)),
             ),

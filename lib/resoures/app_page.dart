@@ -44,7 +44,7 @@ class AppPages {
       name: RouteName.requestDetail,
       page: () {
         final RequestModel req = Get.arguments as RequestModel;
-        return RequestDetailPage(request: req);
+        return RequestDetailPage();
       },
     ),
   ];
