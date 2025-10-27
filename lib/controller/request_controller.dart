@@ -1,9 +1,8 @@
-
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../model/request_model.dart';
+import '../models/request_model.dart';
 
 class RequestController extends GetxController {
   final SupabaseClient supabase = Supabase.instance.client;
@@ -48,8 +47,9 @@ class RequestController extends GetxController {
         await supabase.storage.from('request-photos').upload(fileName, file);
 
         // Get public URL
-        final publicUrl =
-        supabase.storage.from('request-photos').getPublicUrl(fileName);
+        final publicUrl = supabase.storage
+            .from('request-photos')
+            .getPublicUrl(fileName);
         urls.add(publicUrl);
       } catch (e) {
         print('Image upload failed: $e');
@@ -93,7 +93,10 @@ class RequestController extends GetxController {
   // ✅ Update status
   Future<void> _updateStatus(String id, String newStatus) async {
     try {
-      await supabase.from('requests').update({'status': newStatus}).eq('id', id);
+      await supabase
+          .from('requests')
+          .update({'status': newStatus})
+          .eq('id', id);
       await fetchPendingRequests();
     } catch (e) {
       print("Error updating status: $e");

@@ -1,17 +1,20 @@
-
-
 import 'package:driveresq_hackvault/resoures/route_names.dart';
 import 'package:get/get.dart';
 
+import '../models/request_model.dart';
+import '../view/DriverDashboard/driver_home_page.dart';
+import '../view/DriverDashboard/new_request_page.dart';
 import '../view/SplashScreen/splash_screen.dart';
+import '../view/auth/driver/driver_login.dart';
+import '../view/auth/driver/driver_signup.dart';
+import '../view/auth/mechanic/mechanic_login.dart';
+import '../view/auth/mechanic/mechanic_signup.dart';
+import '../view/auth/select_role.dart';
 
 class AppPages {
   static final routes = [
     // Splash Screen
-    GetPage(
-      name: RouteName.splashScreen,
-      page: () => const SplashScreen(),
-    ),
+    GetPage(name: RouteName.splashScreen, page: () => const SplashScreen()),
 
     // Role Selection
     GetPage(
