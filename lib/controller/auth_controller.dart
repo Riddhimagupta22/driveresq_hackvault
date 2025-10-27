@@ -1,12 +1,12 @@
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../Core/supabase_client.dart';
-import '../View/auth/Driver/d_login.dart';
-import '../View/auth/Mechanic/m_loginin.dart';
-import '../View/driver_dashboard/driver_homepage.dart';
-import '../View/mech/mech_home.dart';
+
+import '../core/supabse_client.dart';
+import '../view/DriverDashboard/driver_home_page.dart';
+import '../view/Mechanic/mechanic_home.dart';
+import '../view/auth/driver/driver_login.dart';
+import '../view/auth/mechanic/mechanic_login.dart';
 
 class AuthController extends GetxController {
   final emailController = TextEditingController();
@@ -19,7 +19,6 @@ class AuthController extends GetxController {
 
   final SupabaseClient _client = SupabaseConfig.client;
 
-
   User? get currentUser => _client.auth.currentUser;
 
   final isPasswordHidden = true.obs;
@@ -28,9 +27,13 @@ class AuthController extends GetxController {
     isPasswordHidden.value = !isPasswordHidden.value;
   }
 
-
   Future<void> signUp(
-      String email, String password, String name, String phone, String role) async {
+    String email,
+    String password,
+    String name,
+    String phone,
+    String role,
+  ) async {
     try {
       isLoading.value = true;
 
@@ -85,15 +88,18 @@ class AuthController extends GetxController {
       userRole.value = data['role'] ?? '';
 
       if (userRole.value == 'driver') {
-        Get.offAll(() =>  DriverHome());
+        Get.offAll(() => DriverHome());
       } else if (userRole.value == 'mechanic') {
-        Get.offAll(() =>  MechanicHome());
+        Get.offAll(() => MechanicHome());
       } else {
         throw Exception('Unknown user role');
       }
     } catch (e) {
-      Get.snackbar('Login Failed', e.toString(),
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Login Failed',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -118,9 +124,9 @@ class AuthController extends GetxController {
           .maybeSingle();
 
       if (data != null && data['role'] == 'driver') {
-        Get.offAll(() =>  DriverHome());
+        Get.offAll(() => DriverHome());
       } else if (data != null && data['role'] == 'mechanic') {
-        Get.offAll(() =>  MechanicHome());
+        Get.offAll(() => MechanicHome());
       }
     } else {
       Get.offAllNamed('/role');

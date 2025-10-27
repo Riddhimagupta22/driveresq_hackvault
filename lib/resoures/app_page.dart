@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../models/request_model.dart';
 import '../view/DriverDashboard/driver_home_page.dart';
 import '../view/DriverDashboard/new_request_page.dart';
+import '../view/Mechanic/mechanic_home.dart';
+import '../view/Mechanic/request_detal.dart';
 import '../view/SplashScreen/splash_screen.dart';
 import '../view/auth/driver/driver_login.dart';
 import '../view/auth/driver/driver_signup.dart';
